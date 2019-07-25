@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <button style="margin-top: 20px; height: 34px; font-size: 18px;color: #fff;background-color: #337ab7; border-color: #2e6da4;"
+                    onclick="goBack()">Go Back
+            </button>
+
+            <div style="margin-top: 100px; display: flex; justify-content: center;"
+                 class="text-nowrap">
+                <form method="post">
+                    {% csrf_token %}
+                    <table class="table">
+                        <thead style="background-color: #34b5c3;">
+                        {% for edit_name in form %}
+                            <th class="text-center">{{ edit_name.label }}</th>
+                        {% endfor %}
+                        </thead>
+                        <tbody style="background-color: #34b5c357;color: black; border: 2px solid #34b5c3;">
+                        {% for edit_list in form %}
+                            {% if edit_list.html_name == 'age' %}
+                                <td>
+                                    <div class='input-group date' id='datetimepicker1'>
+                                        <input type="text" name="age" class="form-control datetimepicker-input"
+                                               data-target="#datetimepicker1" required="" id="id_age">
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-calendar"></span></span>
+                                    </div>
+                                </td>
+                            {% else %}
+                                <td>{{ edit_list }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <button href="{% url 'home' %}" type="submit"
+                            style="color: #fff; background-color: #337ab7; border-color: #2e6da4;"
+                            class="btn btn-primary">Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block js %}
+    <script>
+        $(function () {
+            $("#datetimepicker1").datetimepicker({
+                format: 'DD/MM/YYYY',
+            });
+        });
+
+    </script>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+{% endblock %}
