@@ -137,6 +137,7 @@ def AverageView(request, pk):
     # date = InfoFields.objects.filter(id=pk).last()
     # print(date)
     result = []
+    # test
     for m in range(1,13):
         obj = {}
         obj["name"] = month[m-1]
