@@ -1,60 +1,31 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 {% block content %}
 
-    {#    <style>#}
-    {#        table, td, th {#}
-    {#            border: 1px solid black;#}
-    {#        }#}
-    {##}
-    {#        table {#}
-    {#            border-collapse: collapse;#}
-    {#            width: 100%;#}
-    {#        }#}
-    {##}
-    {#        th {#}
-    {#            height: 50px;#}
-    {#        }#}
-    {#    </style>#}
-    {##}
-    {#    <table class="table">#}
-    {#        <form method="post">#}
-    {#            {% csrf_token %}#}
-    {#            <tr>#}
-    {#                {% for i in month %}#}
-    {#                    <th style="transform: rotate(90deg); transform-origin: left;">{{ i }}</th>#}
-    {#                {% endfor %}#}
-    {#            </tr>#}
-    {#            <tr>#}
-    {#                {% for i in date %}#}
-    {#                <td>{{ i }}</td>#}
-    {#                {% endfor %}#}
-    {#            </tr>#}
-    {#        </form>#}
-    {#    </table>#}
-
-
     <div class="container">
+ <form method="GET" class="search_area" style="margin-top: 20px;">
+                        <input class="form-control" type="text" name="daterange" value="{{ request.GET.daterange }}" />
 
-     <button style="margin-top: 20px; height: 34px; font-size: 18px;color: #fff;background-color: #337ab7; border-color: #2e6da4;"
-                    onclick="goBack()">Go Back
-            </button>
-
+                        <button class="btn mt-2 btn-sm btn-success" type="submit">Search</button>
+                    </form>
+        <button style="margin-top: 20px; height: 34px; font-size: 18px;color: #fff;background-color: #337ab7; border-color: #2e6da4;"
+                onclick="goBack()">Go Back
+        </button>
         <table style="margin-top: 100px;" class="table table-bordered">
             <form>
-                <thead>
+                <thead style="background-color: #327ab7; font-size: 20px; color: white;border: 2px solid #327ab7;">
                 <tr>
                     {% for i in month %}
                         <th class="text-center">{{ i }}</th>
                     {% endfor %}
                 </tr>
                 </thead>
-                <tbody>
+                <tbody style="background-color: #efede0ad; font-size: 20px; color: black; border: 2px solid #327ab7;">
                 <tr>
-                    {% for i in data %}
-                    <td>{{ i }}</td>
+                    {% for i in result %}
+                        <td>{{ i.data1 }}</td>
                     {% endfor %}
                 </tr>
-
                 </tbody>
             </form>
         </table>
@@ -62,9 +33,24 @@
 
 {% endblock %}
 {% block js %}
-<script>
+
+    <script>
         function goBack() {
             window.history.back();
         }
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker6').datetimepicker();
+            $('#datetimepicker7').datetimepicker({
+                useCurrent: false //Important! See issue #1075
+            });
+            $("#datetimepicker6").on("dp.change", function (e) {
+                $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+            });
+            $("#datetimepicker7").on("dp.change", function (e) {
+                $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+            });
+        });
     </script>
 {% endblock %}
