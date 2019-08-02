@@ -1,0 +1,33 @@
+.section-card{
+    width: 400px;
+    margin: 0 auto;
+}
+.my-card{
+    background: #e4e4e4;
+    padding: 25px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+.add{
+    margin-top: 15px;
+}
+.btns{
+    margin-top: 20px;
+    text-align: center;
+}
+.option-btns{
+    display: flex !important;
+    justify-content: space-between;
+}
+.modal-dialog{
+    width: 400px !important;
+}
+.search_area{
+    display: flex !important;
+}
+.search_area .btn{
+    margin-left: 5px;
+}
+/*body{*/
+/*    background-color: red !important;*/
+/*}*/

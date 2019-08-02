@@ -64,7 +64,6 @@ def HomeView(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         form.instance.username = request.user
-
         if form.is_valid():
             form.save()
             return redirect("home")
@@ -78,9 +77,10 @@ def HomeView(request):
             all = request.GET.get('daterange').replace(" ", '')
             start = all[:10].replace('/', '-')
             end = all[11:].replace('/', '-')
-            objects_by_date = InfoFields.objects.filter(born_date__range=[start, end])
+            objects_by_date = InfoFields.objects.filter(publish_date__range=[start, end])
             context['objects'] = objects_by_date
-
+        else:
+            context['objects'] = all_objects
         context["form"] = form
         context['data'] = object
         return render(request, "home.html", context)
@@ -144,7 +144,7 @@ def DeleteView(request, id):
 
 
 #
-def SearchView(request, id):
-    if q in request.GET:
-        query = request.GET('q')
-        context["search"] = InfoFields.objects.filter(publish_date__range=query)
+# def SearchView(request, id):
+#     if q in request.GET:
+#         query = request.GET('q')
+#         context["search"] = InfoFields.objects.filter(publish_date__range=query)

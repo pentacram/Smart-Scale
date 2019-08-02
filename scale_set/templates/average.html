@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
+{% block head %}
+{% endblock %}
 {% load widget_tweaks %}
 {% block content %}
 
     <div class="container">
- <form method="GET" class="search_area" style="margin-top: 20px;">
-                        <input class="form-control" type="text" name="daterange" value="{{ request.GET.daterange }}" />
 
-                        <button class="btn mt-2 btn-sm btn-success" type="submit">Search</button>
-                    </form>
         <button style="margin-top: 20px; height: 34px; font-size: 18px;color: #fff;background-color: #337ab7; border-color: #2e6da4;"
                 onclick="goBack()">Go Back
         </button>
@@ -16,14 +14,14 @@
                 <thead style="background-color: #327ab7; font-size: 20px; color: white;border: 2px solid #327ab7;">
                 <tr>
                     {% for i in month %}
-                        <th class="text-center">{{ i }}</th>
+                        <th style="border: 2px solid #327ab7;" class="text-center">{{ i }}</th>
                     {% endfor %}
                 </tr>
                 </thead>
                 <tbody style="background-color: #efede0ad; font-size: 20px; color: black; border: 2px solid #327ab7;">
                 <tr>
                     {% for i in result %}
-                        <td>{{ i.data1 }}</td>
+                        <td style="border: 2px solid #327ab7"; class="text-center">{{ i.data1 }}</td>
                     {% endfor %}
                 </tr>
                 </tbody>

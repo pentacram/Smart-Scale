@@ -14,6 +14,6 @@ urlpatterns = [
     path('edit/<int:pk>', EditView, name="edit"),
     path('table/', AverageView, name="average"),
     path('delete/<int:id>', DeleteView, name="delete"),
-    path('search/<int:id>', SearchView, name="search"),
+    # path('search/<int:id>', SearchView, name="search"),
 
 ]
