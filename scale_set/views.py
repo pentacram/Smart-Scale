@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.db.models import Count, Sum
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
@@ -92,21 +93,52 @@ def TableView(request):
     return redirect("/table")
 
 
-def EditView(request, pk, ):
+def EditView(request, pk):
     edit = InfoFields.objects.filter(id=pk).last()
+    print(edit.weight)
+    context['form'] = EditForm(instance=edit)
     if request.method == "POST":
         form = EditForm(request.POST, instance=edit)
         if form.is_valid():
             form.save()
+            # info = form.save(commit=False)
+            # info.username=request.user
+            # info.save()
             return redirect("home")
-    else:
-        form = EditForm(instance=edit)
-    context = {
-        'form': form,
-        'object': edit
-    }
+            # return HttpResponse("bir")
+        # else:
+        #     return JsonResponse({
+        #         'date': request.POST.get('age'),
+        #         'gender' : request.POST.get('gender'),
+        #         'weight': request.POST.get('weight'),
+        #         'bred': request.POST.get('breed'),
+        #         'feed': request.POST.get('feed'),
+        #         'case': request.POST.get('special_case')
+        #     })
+
+    context['object']=edit
+
     return render(request, 'edit.html', context)
 
+
+
+# def EditView(request,pk):
+#     object = InfoFields.objects.filter(id=pk).last()
+#     if request.method == "POST":
+#         form = EditForm(request.POST, instance=object)
+#         def end_age():
+#             born_date = request.POST.get('born_date').split("-")
+#             born_date = [int(x) for x in born_date]
+#         if form.is_valid():
+#             form.instance.age = end_age()
+#             form.save()
+#     else:
+#         form = EditForm(instance=object)
+#     context={
+#         'form': form,
+#         'object': object
+#     }
+#     return render(request,'edit.html',context)
 
 def AverageView(request):
     # obj={}

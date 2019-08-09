@@ -48,12 +48,12 @@ class EditForm(forms.ModelForm):
     }))
     class Meta:
         model = InfoFields
-        fields = ['age', 'weight', 'breed', 'feed', 'special_case']
+        fields = [ 'weight', 'breed', 'feed', 'special_case','gender']
         widgets = {
-            "age": forms.DateTimeInput(attrs={
-                'class': 'form-control datetimepicker-input',
-                'data-target': '#datetimepicker1'
-            }),
+            # "age": forms.DateTimeInput(attrs={
+            #     'class': 'form-control datetimepicker-input',
+            #     'data-target': '#datetimepicker1'
+            # }),
             "gender": forms.Select(attrs={"class": "form-control"}),
             "breed": forms.TextInput(attrs={"class": "form-control"}),
             "feed": forms.TextInput(attrs={"class": "form-control"}),
