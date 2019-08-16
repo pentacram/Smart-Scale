@@ -2,7 +2,8 @@ from threading import Thread
 import serial
 from django.utils import timezone
 from .models import *
-ser = serial.Serial('COM22',19200,timeout=1)
+ser = serial.Serial('COM23',19200,timeout=1)
+
 while True:
     new_data = ser.read(100)
     if new_data:
@@ -17,6 +18,7 @@ while True:
                     age=current.age,
                     gender=current.gender,
                     feed=current.feed,
+                 
                     born_date=current.born_date
                 )
             background_job = Thread(target=updating())
