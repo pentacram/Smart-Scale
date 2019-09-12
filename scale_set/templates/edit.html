@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <button style="margin-top: 20px; height: 34px; font-size: 18px;color: #fff;background-color: #337ab7; border-color: #2e6da4;"
-                    onclick="goBack()">Go Back
+                    onclick="goBack()">Geriyə
             </button>
             <div style="margin-top: 100px; display: flex; justify-content: center;"
                  class="text-nowrap">
@@ -34,7 +34,7 @@
                     </table>
                     <button href="{% url 'home' %}" type="submit"
                             style="color: #fff; background-color: #337ab7; border-color: #2e6da4;"
-                            class="btn btn-primary">Submit
+                            class="btn btn-primary">Təsdiqlə
                     </button>
                 </form>
             </div>
@@ -43,17 +43,5 @@
 
 {% endblock %}
 {% block js %}
-    <script>
-        $(function () {
-            $("#datetimepicker1").datetimepicker({
-                format: 'DD/MM/YYYY',
-            });
-        });
 
-    </script>
-    <script>
-        function goBack() {
-            window.history.back();
-        }
-    </script>
-{% endblock %}
+   {% endblock %}

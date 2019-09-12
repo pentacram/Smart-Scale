@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     <link href="{% static '/css/bootstrap3.min.css' %}" rel="stylesheet"/>
     <link href="{% static '/css/timepicker.css' %}" rel="stylesheet"/>
-{#    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>#}
+    {#    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>#}
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
@@ -61,6 +61,19 @@
             x.className = x.className.replace("show", "");
         }, 3000);
     }
+
+</script>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+<script>
+    $(function () {
+        $("#datetimepicker1").datetimepicker({
+            format: 'DD/MM/YYYY',
+        });
+    });
 
 </script>
 {% block js %}

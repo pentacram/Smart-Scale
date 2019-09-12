@@ -1,22 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView
-from django.db.models import Count, Sum
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
-from django.utils import timezone
-import datetime
 from .forms import *
 from .models import *
-from django.db.models import Q
-
-from datetime import date
-
-from django.views.generic.dates import MonthArchiveView
-
 
 
 # Create your views here.
@@ -55,12 +45,16 @@ def LogOutView(request):
 
 @login_required(login_url=reverse_lazy('login'))
 def HomeView(request):
-    object = InfoFields.objects.filter(username__pk=request.user.pk)
-    # data = InfoFields.objects.all()
+    a = [int(x.number) for x in InfoFields.objects.all()]
+    a = set(a)
+    object = [InfoFields.objects.filter(number=e).last() for e in a]
     form = RegisterForm()
     pagination = Paginator(object, 10)
     all_objects = pagination.get_page(request.GET.get('page', 1))
     context["page_list"] = all_objects
+
+    context["objects"] = [InfoFields.objects.filter(number=e).last() for e in a]
+
     context["page_range"] = pagination.page_range
     if request.method == "POST":
         form = RegisterForm(request.POST)
@@ -101,20 +95,9 @@ def EditView(request, pk):
         form = EditForm(request.POST, instance=edit)
         if form.is_valid():
             form.save()
-            # info = form.save(commit=False)
-            # info.username=request.user
-            # info.save()
+
             return redirect("home")
-            # return HttpResponse("bir")
-        # else:
-        #     return JsonResponse({
-        #         'date': request.POST.get('age'),
-        #         'gender' : request.POST.get('gender'),
-        #         'weight': request.POST.get('weight'),
-        #         'bred': request.POST.get('breed'),
-        #         'feed': request.POST.get('feed'),
-        #         'case': request.POST.get('special_case')
-        #     })
+
 
     context['object']=edit
 
@@ -122,25 +105,8 @@ def EditView(request, pk):
 
 
 
-# def EditView(request,pk):
-#     object = InfoFields.objects.filter(id=pk).last()
-#     if request.method == "POST":
-#         form = EditForm(request.POST, instance=object)
-#         def end_age():
-#             born_date = request.POST.get('born_date').split("-")
-#             born_date = [int(x) for x in born_date]
-#         if form.is_valid():
-#             form.instance.age = end_age()
-#             form.save()
-#     else:
-#         form = EditForm(instance=object)
-#     context={
-#         'form': form,
-#         'object': object
-#     }
-#     return render(request,'edit.html',context)
 
-def AverageView(request):
+def AverageView(request,id):
     # obj={}
     month = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr',
              'Dekabr']
@@ -153,16 +119,37 @@ def AverageView(request):
         obj = {}
 
         obj["name"] = month[m - 1]
-        query = InfoFields.objects.filter(publish_date__month=m, publish_date__year=2019)
+        query = InfoFields.objects.filter(number=id, publish_date__month=m, publish_date__year=2019)
         if query:
-            obj["data1"] = (query.values("weight").aggregate(Sum("weight"))["weight__sum"] // query.count())
+            sum=0
+            for x in query:
+                sum += x.weight
+            total=sum//query.count()
+            obj["data1"] = total
             # print(month[m-1], obj["data1"])
         else:
-            obj["data1"] = None
+            obj["data1"] = '-'
         result.append(obj)
         context['result'] = result
+        context['id'] = id
     # print(result)
     return render(request, "average.html", context)
+
+def AllDataView(request,id=1, month='September'):
+    month_list = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr',
+             'Dekabr']
+
+    # result = []
+
+    month_num = month_list.index(month) + 1
+    # num=0
+    # for m in range(1, 13):
+    #     if month_list[m - 1] == month:
+    #         num=m
+    # print(num)
+    query = InfoFields.objects.filter(number=id, publish_date__month=month_num, publish_date__year=2019)
+    context['all_data'] = query
+    return render(request, "all_data.html", context)
 
 
 def DeleteView(request, id):
@@ -175,8 +162,3 @@ def DeleteView(request, id):
     return render(request, "home.html", context)
 
 
-#
-# def SearchView(request, id):
-#     if q in request.GET:
-#         query = request.GET('q')
-#         context["search"] = InfoFields.objects.filter(publish_date__range=query)

@@ -8,15 +8,9 @@ class InfoFields(models.Model):
         ("E", "Erkək"),
         ("D", "Dişi")
     )
-    # Special_Case = (
-    #     ("vitamin", "Vitamin"),
-    #     ("derman", "Dərman")
-    #
-    # )
-    # sira = models.IntegerField(null=True)
+
     number = models.CharField(max_length=50, null=True,blank=True)
     weight = models.FloatField(null=True,blank=True)
-    # age = models.CharField(max_length=255)
     gender = models.CharField(max_length=55, choices=T_GENDER,null=True,blank=True)
     breed = models.CharField(max_length=55,null=True,blank=True)
     feed = models.CharField(max_length=55,null=True,blank=True)
@@ -26,5 +20,3 @@ class InfoFields(models.Model):
     publish_date = models.DateTimeField(auto_now_add=True, null=True)
     create_date = models.DateTimeField(auto_now_add=True, null=True)
 
-# class Select(models.Model):
-#     variants = models.CharField(max_length=50, null=True)
