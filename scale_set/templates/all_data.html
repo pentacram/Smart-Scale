@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+    <div class="container">
+
+
+        <button style="margin-top: 20px; height: 34px; font-size: 18px;color: #fff;background-color: #337ab7; border-color: #2e6da4; margin-left: 30px;"
+                onclick="goBack()">Geriyə
+        </button>
+
+        <form method="GET" class="search_area" style="width: 185px;margin-top: 23px;margin-left: 980px;">
+            <input class="form-control" type="text" name="daterange" value="{{ request.GET.daterange }}"/>
+
+
+            {#            <button class="btn mt-2 btn-sm btn-success" type="submit">Search</button>#}
+        </form>
+
+
+        <div style="margin-left:-20px; margin-top: 100px; width:fit-content;" class="table-responsive text-nowrap">
+
+            <table class="table">
+                <thead>
+                <tr style="background-color: #327ab7; color: white; font-size: 20px; border: 2px solid #327ab7;">
+                    <th class="text-center">Sıra</th>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Çəki</th>
+                    <th class="text-center">Yaş</th>
+                    <th class="text-center">Cinsiyyət</th>
+                    <th class="text-center">Cins</th>
+                    <th class="text-center">Yem</th>
+                    <th class="text-center">Əlavə</th>
+                    <th class="text-center">Yenilənmə tarixi</th>
+                    <th class="text-center">Dəyiş</th>
+
+                </tr>
+                </thead>
+                <tbody style="background-color: #e6dface8; font-size: 20px; color: black; border: 2px solid #327ab7;">
+                {% for table_list in all_data %}
+                    <tr>
+                        <td style="border-bottom: 1px solid black;" class="text-center">{{ forloop.counter }}</td>
+                        <td style="border-bottom: 1px solid black;" class="text-center">{{ table_list.number }}</td>
+                        <td style="border-bottom: 1px solid black;" class="text-center">{{ table_list.weight }}</td>
+                        <td style="border-bottom: 1px solid black;"
+                            class="text-center">{{ table_list.age|naturaltime }}</td>
+                        <td style="border-bottom: 1px solid black;" class="text-center">{{ table_list.gender }}</td>
+                        <td style="border-bottom: 1px solid black;" class="text-center">{{ table_list.breed }}</td>
+                        <td style="border-bottom: 1px solid black;" class="text-center">{{ table_list.feed }}</td>
+                        <td style="border-bottom: 1px solid black;"
+                            class="text-center">{{ table_list.special_case }}</td>
+                        <td style="border-bottom: 1px solid black;"
+                            class="text-center">{{ table_list.publish_date| date:"F d Y" }}</td>
+                        {#                        <td class="text-center">{{ table_list.publish_date|naturaltime }}</td>#}
+                        <td style="border-bottom: 1px solid black;" class="text-center">
+
+                            <a
+                                    href="{% url 'edit' table_list.id %}"
+                                    class="btn btn-success">Düzəliş Et</a>
+                            <a href=""
+                               class="btn btn-danger" data-toggle="modal"
+                               data-target="#myModal{{ table_list.id }}"
+                               href="" style="width: 87px;" data-url="{% url 'delete' table_list.id %}">Sil</a>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-md-2 col-md-offset-5">
+                    <ul class="pagination">
+                        {% if page_list.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_list.previous_page_number }}"
+                                   aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% for page in page_range %}
+                            {% if page == page_list.number %}
+                                <li class="page-item active"><a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_list.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_list.next_page_number }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Modal -->
+    {% for delete in data %}
+        <div id="myModal{{ delete.id }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>
+                    <div class="modal-body">
+                        <p>Bu məlumatı silmək istədiyinizə əminsiniz?</p>
+                        <form class="delete_form" method="post" action="{% url 'delete' delete.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Sil</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Bağla</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(function () {
+            $("#datetimepicker1").datetimepicker({
+                format: 'DD/MM/YYYY',
+            });
+        });
+    </script>
+    <script type="application/javascript">
+        $(document).ready(function (e) {
+            $(".btn-delete").click(function () {
+                $(".delete_form").attr("action", $(this).attr("data-url"));
+            });
+        });
+    </script>
+    <script>
+        $(function () {
+
+            $('input[name="daterange"]').daterangepicker({
+                opens: 'left',
+
+                locale: {
+                    cancelLabel: 'Clear',
+                    format: 'YYYY-MM-DD',
+                }
+            }, function (start, end, label) {
+
+                a = start.format('YYYY-MM-DD')
+                b = end.format('YYYY-MM-DD')
+            });
+        });
+    </script>
+{% endblock %}
