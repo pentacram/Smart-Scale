@@ -45,7 +45,7 @@ def LogOutView(request):
 
 @login_required(login_url=reverse_lazy('login'))
 def HomeView(request):
-    a = [int(x.number) for x in InfoFields.objects.all()]
+    a = [str(x.number) for x in InfoFields.objects.all()]
     a = set(a)
     object = [InfoFields.objects.filter(number=e).last() for e in a]
     form = RegisterForm()
