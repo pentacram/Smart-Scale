@@ -106,7 +106,8 @@ def EditView(request, pk):
 
 
 
-def AverageView(request,id):
+def AverageView(request):
+    id = request.GET.get("id")
     # obj={}
     month = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr',
              'Dekabr']
@@ -135,7 +136,7 @@ def AverageView(request,id):
     # print(result)
     return render(request, "average.html", context)
 
-def AllDataView(request,id=1, month='September'):
+def AllDataView(request, month='September'):
     month_list = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr',
              'Dekabr']
 
@@ -147,7 +148,8 @@ def AllDataView(request,id=1, month='September'):
     #     if month_list[m - 1] == month:
     #         num=m
     # print(num)
-    query = InfoFields.objects.filter(number=id, publish_date__month=month_num, publish_date__year=2019)
+    number = request.GET.get("number")
+    query = InfoFields.objects.filter(number=number, publish_date__month=month_num, publish_date__year=2019)
     context['all_data'] = query
     return render(request, "all_data.html", context)
 

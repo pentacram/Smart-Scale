@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, "locale")
+]
 
 # Application definition
 

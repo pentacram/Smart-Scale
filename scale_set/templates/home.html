@@ -51,7 +51,7 @@
                         {#                        <td class="text-center">{{ table_list.publish_date|naturaltime }}</td>#}
                         <td style="border-bottom: 1px solid black;" class="text-center">
                             <a
-                                    href="{% url 'average' table_list.number %}"
+                                    href="{% url 'average' %}?id={{ table_list.number }}"
                                     class="btn btn-primary">Kecid Et</a>
                             <a
                                     href="{% url 'edit' table_list.id %}"
