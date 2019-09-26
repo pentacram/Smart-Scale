@@ -35,8 +35,8 @@ def analyze_data(cow_id, from_date, to_date):
         data = {'pic': graph_name, 'max_weight': maxWeight, 'max_weight_date': maxWeightDate, \
                 'min_weight': minWeight, 'min_weight_date': minWeightDate, 'mean_weight': meanWeight}
         return data
-    except Exception:
-        print('data not found')
+    except Exception as ex:
+        print('data not found', ex)
 
 
 print(analyze_data(0, 0, 0))

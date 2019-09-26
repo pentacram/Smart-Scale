@@ -15,6 +15,7 @@ urlpatterns = [
     path('table/', AverageView, name="average"),
     path('delete/<int:id>', DeleteView, name="delete"),
     # path('alldata/<int:id>/$m=month', AllDataView, name='all-data'),
-    path('alldata/<str:month>', AllDataView,name='all-data')
+    path('alldata/<str:month>', AllDataView,name='all-data'),
+    path('dataanalyz/', DataAnalyzView.as_view(), name = 'datanalyz'),
 
 ]

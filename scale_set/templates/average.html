@@ -10,14 +10,12 @@
         {#        </form>#}
 
         <form method="GET" class="search_area" style="width: 185px;margin-top: 23px;margin-left: 980px;">
-            <input class="form-control" type="text" name="daterange" value="{{ request.GET.daterange }}"/>
-
-
+            <input id='data-url' class="form-control" type="text" name="daterange" value="{% url 'datanalyz' %}"/>
 {#                        <button class="btn mt-2 btn-sm btn-success" type="submit">Search</button>#}
-                        <button id='data-analyz-btn' type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#myModal">
-                            Data analyz
-                        </button>
+                <button id='data-analyz-btn' type="submit" class="btn btn-primary data-analyz" data-toggle="modal"
+                    data-target="#myModal">
+                        Data analyz
+                </button>
 {#            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal#}
 {#            </button>#}
         </form>
@@ -46,7 +44,7 @@
             </form>
         </table>
     </div>
-    <div class="container">
+    <div class="container ajax-data">
         <!-- Button to Open the Modal -->
 
         {% comment %} <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
@@ -55,28 +53,8 @@
 
 
         <!-- The Modal -->
-        <div class="modal fade" id="myModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title">Modal Heading</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                       {{ analyz_data }}
-                    </div>
-
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
-
-                </div>
-            </div>
+        <div class="modal fade " id="myModal grid-container">
+            
         </div>
 
     </div>
@@ -133,5 +111,26 @@
                 b = end.format('YYYY-MM-DD')
             });
         });
+
+        $(document).ready(function(){
+	    $('.data-analyz').click(function(){
+	    let data_type = $(this).data('type');
+	    let data_container = $('.ajax-data');
+	    let requested_url = $('#data-url').val();
+	    $.ajax({
+		    url:requested_url,
+		    type:'GET',
+		    data:{'data':data_type},
+		    success:function(data){
+		    	$("#grid-container").css("height", "auto");
+		    	console.log(data)
+		    	data_container.html(data);
+		    },
+		error:function(err){
+			console.log(err)
+		}
+	})	
+	})
+});
     </script>
 {% endblock %}

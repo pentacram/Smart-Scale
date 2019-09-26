@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
+from django.views.generic import View
 from .serial_app import analyze_data
 from .forms import *
 from .models import *
@@ -116,17 +117,17 @@ def AverageView(request):
 
     result = []
 
-    if request.GET.get('daterange', False):
-        all = request.GET.get('daterange').replace(" ", '')
-        start = all[:10].replace('/', '-')
-        end = all[11:].replace('/', '-')
-        print(start, end)
-        # object_by_date_analyz = InfoFields.objects.filter(id=id, publish_date__range = [start, end])
-        # context['data_analys'] = object_by_date_analyz
-        # print(object_by_date_analyz)
-        data = analyze_data(id, start, end)
-        context['analyz_data'] = data
-        print(context['analyz_data'])
+    #if request.GET.get('daterange', False):
+    #    all = request.GET.get('daterange').replace(" ", '')
+    #    start = all[:10].replace('/', '-')
+    #    end = all[11:].replace('/', '-')
+    #    print(start, end)
+    #    # object_by_date_analyz = InfoFields.objects.filter(id=id, publish_date__range = [start, end])
+    #    # context['data_analys'] = object_by_date_analyz
+    #    # print(object_by_date_analyz)
+    #    data = analyze_data(id, start, end)
+    #    context['analyz_data'] = data
+    #    print(context['analyz_data'])
 
     for m in range(1, 13):
 
@@ -173,7 +174,22 @@ def DeleteView(request, id):
     if request.method == 'POST':
         delete.delete()
         return redirect('home')
-
     return render(request, "home.html", context)
+
+class DataAnalyzView(View):
+    ajax_template = 'ajax.html'
+    def get(self,request,*args,**kwargs):
+        if request.is_ajax():
+            all = request.GET.get('daterange').replace(" ", '')
+            start = all[:10].replace('/', '-')
+            end = all[11:].replace('/', '-')
+            print(start, end)
+            # object_by_date_analyz = InfoFields.objects.filter(id=id, publish_date__range = [start, end])
+            # context['data_analys'] = object_by_date_analyz
+            # print(object_by_date_analyz)
+            data = analyze_data(id, start, end)
+            if data:
+                return render(request,self.ajax_template,{'data':data})
+                
 
 
